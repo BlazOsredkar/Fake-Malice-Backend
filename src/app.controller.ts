@@ -1,4 +1,14 @@
-import {BadRequestException, Body, Controller, Get, Post, Req, Res, UnauthorizedException} from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get, HttpCode,
+    HttpStatus,
+    Post,
+    Req,
+    Res,
+    UnauthorizedException
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import * as bcrypt from 'bcrypt';
 import {JwtService} from "@nestjs/jwt";
@@ -11,6 +21,7 @@ export class AppController {
               private jwtService: JwtService) {}
 
   @Post('login')
+  @HttpCode(200)
   async login(
       @Body('email') email: string,
       @Body('password') password: string,
