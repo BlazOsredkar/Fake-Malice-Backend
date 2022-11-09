@@ -1,5 +1,7 @@
-import {Column, Entity, Generated, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Generated, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {type} from "os";
+import {Sola} from "./sole.entity";
+import {Razred} from "./razredi.entity";
 
 
 @Entity('Dijaki')
@@ -33,6 +35,10 @@ export class User {
 
     @Column('real')
     stanjerac:number;
+
+    @ManyToOne(type => Razred, razred => razred.id)
+    @JoinColumn({name: 'razred_id'})
+    razred:Razred;
 
 
 }

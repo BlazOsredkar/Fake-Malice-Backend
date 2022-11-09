@@ -5,8 +5,9 @@ import { AppService } from './app.service';
 import {User} from "./entities/user.entity";
 import {JwtModule} from "@nestjs/jwt";
 import { ConfigModule } from '@nestjs/config';
-import {Sole} from "./entities/sole.entity";
-import {Razredi} from "./entities/razredi.entity";
+import {Sola} from "./entities/sole.entity";
+import {Razred} from "./entities/razredi.entity";
+import {Jedilnica} from "./entities/jedilnice.entity";
 
 @Module({
   imports: [
@@ -18,10 +19,10 @@ import {Razredi} from "./entities/razredi.entity";
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Sole, Razredi],
+      autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User]),
+      TypeOrmModule.forFeature([User, Sola, Razred, Jedilnica]),
       JwtModule.register({
         //TODO popravi secret
         secret:process.env.SECRET,

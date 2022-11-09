@@ -32,7 +32,7 @@ export class AppController {
       if(!user){
         throw new BadRequestException('Neveljavni podatki za prijavo');
       }
-      console.log(user, body.geslo);
+      //console.log(user, body.geslo);
 
       if(!await bcrypt.compare(body.geslo , user.geslo)){
           throw new BadRequestException('Neveljavni podatki za prijavo');
