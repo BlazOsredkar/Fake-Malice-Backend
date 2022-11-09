@@ -8,8 +8,8 @@ export class Razredi {
     id:number;
 
     @ManyToOne(type => Sole, sole => sole.id)
-    @JoinColumn({name: 'sole_id'})
-    sole:Sole;
+    @JoinColumn({name: 'sola_id'})
+    sola:Sole;
 
     @Column()
     ime:string;
