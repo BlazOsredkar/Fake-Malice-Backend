@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {User} from "./user.entity";
+import {User} from "./entities/user.entity";
 import {JwtModule} from "@nestjs/jwt";
 import { ConfigModule } from '@nestjs/config';
+import {Sole} from "./entities/sole.entity";
+import {Razredi} from "./entities/razredi.entity";
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Sole, Razredi],
       synchronize: true,
     }),
       TypeOrmModule.forFeature([User]),

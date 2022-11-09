@@ -13,6 +13,7 @@ import { AppService } from './app.service';
 import * as bcrypt from 'bcrypt';
 import {JwtService} from "@nestjs/jwt";
 import {Response, Request} from "express";
+import {LoginUserDto} from "./dto/loginUser.dto";
 
 
 @Controller('api')
@@ -23,16 +24,17 @@ export class AppController {
   @Post('login')
   @HttpCode(200)
   async login(
-      @Body('email') email: string,
-      @Body('password') password: string,
+      @Body() body: LoginUserDto,
       @Res({passthrough:true}) response: Response,
   ) {
-      const user = await this.appService.findOne({email});
+      const user = await this.appService.findOne({eposta: body.eposta});
+
       if(!user){
         throw new BadRequestException('Neveljavni podatki za prijavo');
       }
+      console.log(user, body.geslo);
 
-      if(!await bcrypt.compare(password, user.geslo)){
+      if(!await bcrypt.compare(body.geslo , user.geslo)){
           throw new BadRequestException('Neveljavni podatki za prijavo');
       }
 

@@ -22,16 +22,17 @@ export class User {
     @Column()
     telefon:string;
 
-    @Column('integer')
+    @Column()
     emso:number;
 
-    @Column('integer')
+    @Column()
     davcna:number;
 
     @Column('date')
     datumroj:Date;
 
-
+    @Column('real')
+    stanjerac:number;
 
 
 }
