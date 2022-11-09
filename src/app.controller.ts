@@ -32,7 +32,7 @@ export class AppController {
         throw new BadRequestException('Neveljavni podatki za prijavo');
       }
 
-      if(!await bcrypt.compare(password, user.password)){
+      if(!await bcrypt.compare(password, user.geslo)){
           throw new BadRequestException('Neveljavni podatki za prijavo');
       }
 
@@ -59,7 +59,7 @@ export class AppController {
 
           const user = await this.appService.findOne({id: data['id']})
 
-          const {password, ...result} = user;
+          const {geslo, ...result} = user;
 
           return result;
       }catch (e){

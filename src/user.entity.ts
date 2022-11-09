@@ -1,17 +1,37 @@
-import {Column, Entity, PrimaryColumn } from "typeorm";
+import {Column, Entity, Generated, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
+import {type} from "os";
 
 
-@Entity('users')
+@Entity('Dijaki')
 export class User {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn('increment')
     id:number;
 
     @Column()
-    name:string;
-
-    @Column({unique:true})
-    email:string;
+    ime:string;
 
     @Column()
-    password:string;
+    priimek:string;
+
+    @Column({unique:true})
+    eposta:string;
+
+    @Column()
+    geslo:string;
+
+    @Column()
+    telefon:string;
+
+    @Column('integer')
+    emso:number;
+
+    @Column('integer')
+    davcna:number;
+
+    @Column('date')
+    datumroj:Date;
+
+
+
+
 }
