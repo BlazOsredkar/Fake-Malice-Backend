@@ -7,7 +7,7 @@ import {
     Post,
     Req,
     Res,
-    UnauthorizedException, UseGuards
+    UnauthorizedException, UseGuards, UseInterceptors
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import * as bcrypt from 'bcrypt';
@@ -83,6 +83,7 @@ export class AppController {
 
   @UseGuards(AdminGuard)
   @Post('register')
+
     @HttpCode(200)
     async register(
         @Body() body: RegisterUserDto,
@@ -92,7 +93,11 @@ export class AppController {
                 throw new BadRequestException('Uporabnik že obstaja!');
             }
             const hash = await bcrypt.hash(body.geslo, 10);
-            return await this.appService.create({...body, geslo: hash});
+            const{geslo, ...data} = await this.appService.create({...body, geslo: hash});
+
+            return data;
+
+
 
   }
 
