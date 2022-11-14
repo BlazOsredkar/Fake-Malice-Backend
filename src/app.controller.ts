@@ -7,13 +7,15 @@ import {
     Post,
     Req,
     Res,
-    UnauthorizedException
+    UnauthorizedException, UseGuards
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import * as bcrypt from 'bcrypt';
 import {JwtService} from "@nestjs/jwt";
 import {Response, Request} from "express";
 import {LoginUserDto} from "./dto/loginUser.dto";
+import {RegisterUserDto} from "./dto/registerUser.dto";
+import {AdminGuard} from "./admin/admin.guard";
 
 
 @Controller('api')
@@ -70,11 +72,30 @@ export class AppController {
   }
 
   @Post('logout')
+  @HttpCode(200)
   async logout(@Res({passthrough:true}) response: Response){
-      response.clearCookie('jwt');
+      response.clearCookie('jwt', {httpOnly:true});
 
       return{
           message: 'Uspešna odjava!'
       }
   }
+
+  @UseGuards(AdminGuard)
+  @Post('register')
+    @HttpCode(200)
+    async register(
+        @Body() body: RegisterUserDto,
+    ) {
+            const user = await this.appService.findOne({eposta: body.eposta, emso: body.emso});
+            if(user){
+                throw new BadRequestException('Uporabnik že obstaja!');
+            }
+            const hash = await bcrypt.hash(body.geslo, 10);
+            return await this.appService.create({...body, geslo: hash});
+
+  }
+
+
+
 }

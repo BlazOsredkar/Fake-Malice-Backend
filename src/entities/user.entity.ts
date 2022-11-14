@@ -33,8 +33,11 @@ export class User {
     @Column('date')
     datumroj:Date;
 
-    @Column('real')
+    @Column('real' , {default: 0.0})
     stanjerac:number;
+
+    @Column( {default: false})
+    isadmin:boolean;
 
     @ManyToOne(type => Razred, razred => razred.id)
     @JoinColumn({name: 'razred_id'})

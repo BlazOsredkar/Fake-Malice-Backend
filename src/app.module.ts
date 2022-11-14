@@ -28,8 +28,11 @@ import {Jedilnica} from "./entities/jedilnice.entity";
         secret:process.env.SECRET,
         signOptions: {expiresIn:'1d'}
       }),
+
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [AppService]
 })
 export class AppModule {}
+

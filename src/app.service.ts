@@ -13,4 +13,8 @@ export class AppService {
   async findOne(condition:any): Promise<User>{
     return await this.userRepository.findOne({where:condition});
   }
+
+  async create(data: any): Promise<User>{
+    return await this.userRepository.save(data);
+  }
 }
