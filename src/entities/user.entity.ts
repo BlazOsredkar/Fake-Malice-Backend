@@ -2,6 +2,7 @@ import {Column, Entity, Generated, JoinColumn, ManyToOne, PrimaryColumn, Primary
 import {type} from "os";
 import {Sola} from "./sole.entity";
 import {Razred} from "./razredi.entity";
+import {Ceuviz} from "./ceuviz.entity";
 
 
 @Entity('Dijaki')
@@ -42,6 +43,10 @@ export class User {
     @ManyToOne(type => Razred, razred => razred.id)
     @JoinColumn({name: 'razred_id'})
     razred:Razred;
+
+    @ManyToOne(type => Ceuviz, ceuviz => ceuviz.id)
+    @JoinColumn({name: 'ceuviz_id'})
+    ceuviz:Ceuviz;
 
 
 }

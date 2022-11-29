@@ -1,15 +1,17 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
-
-@Entity('CEUVIZ') 
-export class Ceuviz {
+@Entity()
+export class VrstaMenija {
 
     @PrimaryGeneratedColumn('increment')
     id:number;
 
     @Column()
-    status:string;
+    ime:string;
 
     @Column()
-    cena:number;
+    opis:string;
+
+    @Column()
+    ikona:string;
 }

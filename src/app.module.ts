@@ -7,6 +7,13 @@ import {JwtModule} from "@nestjs/jwt";
 import { ConfigModule } from '@nestjs/config';
 import {Sola} from "./entities/sole.entity";
 import {Razred} from "./entities/razredi.entity";
+import {Meni} from "./entities/meniji.entity";
+import {VrstaMenija} from "./entities/vrste_menijev.entity";
+import {Narocilo} from "./entities/narocila.entity";
+import {Lokacija} from "./entities/lokacije.entity";
+import {DovoljeniMeni} from "./entities/dovoljeni_meniji.entity";
+import {Ceuviz} from "./entities/ceuviz.entity";
+import {Kraj} from "./entities/kraji.entity";
 
 
 @Module({
@@ -22,7 +29,7 @@ import {Razred} from "./entities/razredi.entity";
       autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User, Sola, Razred]),
+      TypeOrmModule.forFeature([User, Sola, Razred, Meni, VrstaMenija, Narocilo, Lokacija, DovoljeniMeni, Ceuviz, Kraj]),
       JwtModule.register({
         //TODO popravi secret
         secret:process.env.SECRET,
