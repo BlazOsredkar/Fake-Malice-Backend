@@ -7,7 +7,7 @@ import {JwtModule} from "@nestjs/jwt";
 import { ConfigModule } from '@nestjs/config';
 import {Sola} from "./entities/sole.entity";
 import {Razred} from "./entities/razredi.entity";
-import {Jedilnica} from "./entities/jedilnice.entity";
+
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import {Jedilnica} from "./entities/jedilnice.entity";
       autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User, Sola, Razred, Jedilnica]),
+      TypeOrmModule.forFeature([User, Sola, Razred]),
       JwtModule.register({
         //TODO popravi secret
         secret:process.env.SECRET,
