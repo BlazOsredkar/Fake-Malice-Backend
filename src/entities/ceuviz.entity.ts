@@ -1,7 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 
-@Entity('CEUVIZ') 
+@Entity('Ceuviz') 
 export class Ceuviz {
 
     @PrimaryGeneratedColumn('increment')

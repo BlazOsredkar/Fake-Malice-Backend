@@ -2,7 +2,7 @@ import {Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Razred} from "./razredi.entity";
 import {Meni} from "./meniji.entity";
 
-@Entity()
+@Entity('DovoljeniMeniji')
 export class DovoljeniMeni {
 
     @PrimaryGeneratedColumn('increment')
