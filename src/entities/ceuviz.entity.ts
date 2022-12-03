@@ -1,15 +1,13 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-
-@Entity('Ceuviz') 
+@Entity('Ceuviz')
 export class Ceuviz {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @PrimaryGeneratedColumn('increment')
-    id:number;
+  @Column()
+  status: string;
 
-    @Column()
-    status:string;
-
-    @Column()
-    cena:number;
+  @Column('decimal')
+  cena: number;
 }
