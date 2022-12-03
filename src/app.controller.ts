@@ -45,7 +45,8 @@ export class AppController {
       response.cookie('jwt', jwt, {httpOnly:true});
 
       return {
-          message: 'Uspeh!'
+          message: 'Uspeh!',
+          
       };
 
 

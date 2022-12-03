@@ -7,4 +7,6 @@ export class LoginUserDto {
 
     @IsNotEmpty()
     geslo: string;
+
+    
 }
