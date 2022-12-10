@@ -10,7 +10,7 @@ import {
 import { type } from 'os';
 import { Sola } from './sole.entity';
 import { Razred } from './razredi.entity';
-import { Ceuviz } from './ceuviz.entity';
+import {Kraj} from "./kraji.entity";
 
 @Entity('Dijaki')
 export class User {
@@ -51,7 +51,8 @@ export class User {
   @JoinColumn({ name: 'razred_id' })
   razred: Razred;
 
-  @ManyToOne((type) => Ceuviz, (ceuviz) => ceuviz.id)
-  @JoinColumn({ name: 'ceuviz_id' })
-  ceuviz: Ceuviz;
+  @ManyToOne((type) => Kraj, (kraj) => kraj.id)
+  @JoinColumn({ name: 'kraj_id' })
+  kraj: Kraj;
+
 }

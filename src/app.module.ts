@@ -10,9 +10,6 @@ import {Razred} from "./entities/razredi.entity";
 import {Meni} from "./entities/meniji.entity";
 import {VrstaMenija} from "./entities/vrste_menijev.entity";
 import {Narocilo} from "./entities/narocila.entity";
-import {Lokacija} from "./entities/lokacije.entity";
-import {DovoljeniMeni} from "./entities/dovoljeni_meniji.entity";
-import {Ceuviz} from "./entities/ceuviz.entity";
 import {Kraj} from "./entities/kraji.entity";
 
 
@@ -29,7 +26,7 @@ import {Kraj} from "./entities/kraji.entity";
       autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User, Sola, Razred, Meni, VrstaMenija, Narocilo, Lokacija, DovoljeniMeni, Ceuviz, Kraj]),
+      TypeOrmModule.forFeature([User, Sola, Razred, Meni, VrstaMenija, Narocilo,Kraj]),
       JwtModule.register({
         //TODO popravi secret
         secret:process.env.SECRET,
