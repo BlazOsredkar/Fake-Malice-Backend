@@ -1,4 +1,4 @@
-import {Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "./user.entity";
 import {Meni} from "./meniji.entity";
 
@@ -17,5 +17,7 @@ export class Narocilo {
     @JoinColumn({name: 'meni_id'})
     meni:Meni;
 
+    @Column()
+    datum:Date;
     
 }
