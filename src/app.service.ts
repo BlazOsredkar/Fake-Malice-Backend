@@ -23,4 +23,8 @@ export class AppService {
   async findMeni(condition:any): Promise<Meni[]>{
     return await this.meniRepository.find({where:condition});
   }
+
+  async forgotPassword(data: any): Promise<User[]>{
+    return await this.userRepository.find(data);
+  }
 }

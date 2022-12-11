@@ -17,101 +17,103 @@ import {LoginUserDto} from "./dto/loginUser.dto";
 import {RegisterUserDto} from "./dto/registerUser.dto";
 import {AdminGuard} from "./admin/admin.guard";
 import {UserGuard} from "./user/user.guard";
+import {ForgotPasswordDto} from "./dto/forgotPassword.dto";
+
 
 
 @Controller('api')
 export class AppController {
-  constructor(private readonly appService: AppService,
-              private jwtService: JwtService) {}
+    constructor(private readonly appService: AppService,
+                private jwtService: JwtService) {
+    }
 
-  @Post('login')
-  @HttpCode(200)
-  async login(
-      @Body() body: LoginUserDto,
-      @Res({passthrough:true}) response: Response,
-  ) {
-      const user = await this.appService.findOne({eposta: body.eposta});
+    @Post('login')
+    @HttpCode(200)
+    async login(
+        @Body() body: LoginUserDto,
+        @Res({passthrough: true}) response: Response,
+    ) {
+        const user = await this.appService.findOne({eposta: body.eposta});
 
-      if(!user){
-        throw new BadRequestException('Neveljavni podatki za prijavo');
-      }
-      //console.log(user, body.geslo);
+        if (!user) {
+            throw new BadRequestException('Neveljavni podatki za prijavo');
+        }
+        //console.log(user, body.geslo);
 
-      if(!await bcrypt.compare(body.geslo , user.geslo)){
-          throw new BadRequestException('Neveljavni podatki za prijavo');
-      }
+        if (!await bcrypt.compare(body.geslo, user.geslo)) {
+            throw new BadRequestException('Neveljavni podatki za prijavo');
+        }
 
-      const jwt = await this.jwtService.signAsync({id: user.id});
+        const jwt = await this.jwtService.signAsync({id: user.id});
 
-      response.cookie('jwt', jwt, {httpOnly:true});
+        response.cookie('jwt', jwt, {httpOnly: true});
 
-      return {
-          message: 'Uspeh!',
-          
-      };
+        return {
+            message: 'Uspeh!',
+
+        };
 
 
-  }
-  @Get('user')
-  async user(@Req() request: Request ){
-      try {
-          const cookie = request.cookies['jwt'];
+    }
 
-          const data = await this.jwtService.verifyAsync(cookie);
+    @Get('user')
+    async user(@Req() request: Request) {
+        try {
+            const cookie = request.cookies['jwt'];
 
-          if(!data){
-              throw new UnauthorizedException();
-          }
+            const data = await this.jwtService.verifyAsync(cookie);
 
-          const user = await this.appService.findOne({id: data['id']})
+            if (!data) {
+                throw new UnauthorizedException();
+            }
 
-          const {geslo, ...result} = user;
+            const user = await this.appService.findOne({id: data['id']})
 
-          return result;
-      }catch (e){
-          throw new UnauthorizedException();
-      }
-  }
+            const {geslo, ...result} = user;
 
-  @Post('logout')
-  @HttpCode(200)
-  async logout(@Res({passthrough:true}) response: Response){
-      response.clearCookie('jwt', {httpOnly:true});
+            return result;
+        } catch (e) {
+            throw new UnauthorizedException();
+        }
+    }
 
-      return{
-          message: 'Uspešna odjava!'
-      }
-  }
+    @Post('logout')
+    @HttpCode(200)
+    async logout(@Res({passthrough: true}) response: Response) {
+        response.clearCookie('jwt', {httpOnly: true});
 
-  @UseGuards(AdminGuard)
-  @Post('register')
+        return {
+            message: 'Uspešna odjava!'
+        }
+    }
+
+    @UseGuards(AdminGuard)
+    @Post('register')
 
     @HttpCode(200)
     async register(
         @Body() body: RegisterUserDto,
     ) {
-            const user = await this.appService.findOne({eposta: body.eposta, emso: body.emso});
-            if(user){
-                throw new BadRequestException('Uporabnik že obstaja!');
-            }
-            const hash = await bcrypt.hash(body.geslo, 10);
-            const{geslo, ...data} = await this.appService.create({...body, geslo: hash});
+        const user = await this.appService.findOne({eposta: body.eposta, emso: body.emso});
+        if (user) {
+            throw new BadRequestException('Uporabnik že obstaja!');
+        }
+        const hash = await bcrypt.hash(body.geslo, 10);
+        const {geslo, ...data} = await this.appService.create({...body, geslo: hash});
 
-            return data;
+        return data;
 
 
-
-  }
-
+    }
 
 
     @Get('meni')
     @UseGuards(UserGuard)
     async meni(@Query('datum') datum: string) {
 
-      if(!datum){
+        if (!datum) {
             throw new BadRequestException('Datum je obvezen parameter!');
-      }
+        }
 
         try {
             const date = new Date(datum);
@@ -127,10 +129,21 @@ export class AppController {
         }
 
 
-
     }
 
 
+    @Post('forgotPassword')
+    @HttpCode(200)
+    async forgotPassword(
+        @Body() body: ForgotPasswordDto,
+    ) {
+
+        const user = await this.appService.findOne({eposta: body.eposta});
+        if (!user) {
+            throw new BadRequestException('Uporabnik ne obstaja!');
+        }
+        return user;
+    }
 
 
 
