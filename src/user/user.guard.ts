@@ -4,7 +4,7 @@ import {AppService} from "../app.service";
 import {JwtService} from "@nestjs/jwt";
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class UserGuard implements CanActivate {
   constructor(private readonly appService: AppService,
               private jwtService: JwtService) {}
   async canActivate(
@@ -14,14 +14,11 @@ export class AdminGuard implements CanActivate {
       const request = context.switchToHttp().getRequest();
       const jwt = request.cookies['jwt'];
       const data = this.jwtService.verify(jwt);
-      const user = await this.appService.findOne({id: data.id});
-      if (user.isadmin) {
+      if(data){
         return true;
       }
-      return false;
     } catch (e) {
       return false;
     }
   }
 }
-

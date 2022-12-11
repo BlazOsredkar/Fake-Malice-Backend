@@ -10,9 +10,12 @@ export class Meni {
     @Column()
     opis:string;
 
-    @ManyToOne((type) => VrstaMenija, (vrstaMenija) => vrstaMenija.id)
+    @ManyToOne((type) => VrstaMenija, (vrstaMenija) => vrstaMenija.id, {eager:true})
     @JoinColumn({name: 'vrsta_menija_id'})
     vrstaMenija:VrstaMenija;
+
+    @Column()
+    datum:Date;
 
 
 

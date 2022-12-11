@@ -4,7 +4,7 @@ import {
     Controller,
     Get, HttpCode,
     HttpStatus,
-    Post,
+    Post, Query,
     Req,
     Res,
     UnauthorizedException, UseGuards, UseInterceptors
@@ -16,6 +16,7 @@ import {Response, Request} from "express";
 import {LoginUserDto} from "./dto/loginUser.dto";
 import {RegisterUserDto} from "./dto/registerUser.dto";
 import {AdminGuard} from "./admin/admin.guard";
+import {UserGuard} from "./user/user.guard";
 
 
 @Controller('api')
@@ -101,6 +102,35 @@ export class AppController {
 
 
   }
+
+
+
+    @Get('meni')
+    @UseGuards(UserGuard)
+    async meni(@Query('datum') datum: string) {
+
+      if(!datum){
+            throw new BadRequestException('Datum je obvezen parameter!');
+      }
+
+        try {
+            const date = new Date(datum);
+            date.setHours(0, 0, 0, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (date < today) {
+                throw new BadRequestException('Datum mora biti v prihodnosti!');
+            }
+            return this.appService.findMeni({datum: date});
+        } catch (e) {
+            throw new BadRequestException('Datum je v napačnem formatu!');
+        }
+
+
+
+    }
+
+
 
 
 
