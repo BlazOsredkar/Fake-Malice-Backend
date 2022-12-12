@@ -23,9 +23,15 @@ import {ForgotPasswordDto} from "./dto/forgotPassword.dto";
 
 @Controller('api')
 export class AppController {
+    private readonly cookieOptions = {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 ,
+    }
     constructor(private readonly appService: AppService,
                 private jwtService: JwtService) {
+
     }
+
 
     @Post('login')
     @HttpCode(200)
@@ -46,7 +52,7 @@ export class AppController {
 
         const jwt = await this.jwtService.signAsync({id: user.id});
 
-        response.cookie('jwt', jwt, {httpOnly: true});
+        response.cookie('jwt', jwt, this.cookieOptions);
 
         return {
             message: 'Uspeh!',
@@ -80,7 +86,7 @@ export class AppController {
     @Post('logout')
     @HttpCode(200)
     async logout(@Res({passthrough: true}) response: Response) {
-        response.clearCookie('jwt', {httpOnly: true});
+        response.clearCookie('jwt', this.cookieOptions);
 
         return {
             message: 'Uspešna odjava!'
