@@ -18,6 +18,7 @@ import {RegisterUserDto} from "./dto/registerUser.dto";
 import {AdminGuard} from "./admin/admin.guard";
 import {UserGuard} from "./user/user.guard";
 import {ForgotPasswordDto} from "./dto/forgotPassword.dto";
+import {CreateMeniDto} from "./dto/createMeni.dto";
 
 
 
@@ -149,6 +150,24 @@ export class AppController {
             throw new BadRequestException('Uporabnik ne obstaja!');
         }
         return user;
+    }
+
+    @Post('createMeni')
+    @UseGuards(AdminGuard)
+    @HttpCode(200)
+    async createMeni(
+        @Body() body: CreateMeniDto,
+    ) {
+
+        const meni = await this.appService.createMeni(body);
+        return meni;
+
+    }
+
+    @Get('vrsteMenijev')
+    @UseGuards(UserGuard)
+    async vrsteMenijev() {
+        return this.appService.vrsteMenijev();
     }
 
 

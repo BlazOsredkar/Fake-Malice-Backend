@@ -28,4 +28,6 @@ export class RegisterUserDto {
     datumroj: string;
 
 
+
+
 }
