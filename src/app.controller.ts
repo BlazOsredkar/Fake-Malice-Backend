@@ -1,7 +1,7 @@
 import {
     BadRequestException,
     Body,
-    Controller,
+    Controller, Delete,
     Get, HttpCode,
     HttpStatus,
     Post, Query,
@@ -170,6 +170,15 @@ export class AppController {
         return this.appService.vrsteMenijev();
     }
 
+    @Delete('deleteMeni')
+    @UseGuards(AdminGuard)
+    @HttpCode(200)
+    async deleteMeni(
+        @Query('id') id: string,
+    ) {
+
+            const meni = await this.appService.deleteMeni(id);
+    }
 
 
 }

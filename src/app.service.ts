@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
-import {Repository} from "typeorm";
+import {DeleteResult, Repository} from "typeorm";
 import {Meni} from "./entities/meniji.entity";
 import {VrstaMenija} from "./entities/vrste_menijev.entity";
 
@@ -36,4 +36,10 @@ export class AppService {
   async vrsteMenijev(): Promise<VrstaMenija[]>{
     return await  this.vrstaMenijaRepository.find();
   }
+
+    async deleteMeni(condition:any): Promise<DeleteResult>{
+        return await this.meniRepository.delete(condition);
+    }
+
+
 }
