@@ -177,7 +177,8 @@ export class AppController {
         @Query('id') id: string,
     ) {
 
-            const meni = await this.appService.deleteMeni(id);
+            const meni = await this.appService.deleteMeni({id: id});
+            return meni;
     }
 
 
