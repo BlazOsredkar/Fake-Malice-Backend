@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import {User} from "./entities/user.entity";
-import {JwtModule} from "@nestjs/jwt";
+import {JwtModule, JwtService} from "@nestjs/jwt";
 import { ConfigModule } from '@nestjs/config';
 import {Sola} from "./entities/sole.entity";
 import {Razred} from "./entities/razredi.entity";
@@ -11,6 +11,8 @@ import {Meni} from "./entities/meniji.entity";
 import {VrstaMenija} from "./entities/vrste_menijev.entity";
 import {Narocilo} from "./entities/narocila.entity";
 import {Kraj} from "./entities/kraji.entity";
+import { MeniModule } from './meni/meni.module';
+import { CommonModule } from './common/common.module';
 
 
 @Module({
@@ -26,17 +28,16 @@ import {Kraj} from "./entities/kraji.entity";
       autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User, Sola, Razred, Meni, VrstaMenija, Narocilo,Kraj]),
-      JwtModule.register({
-        //TODO popravi secret
-        secret:process.env.SECRET,
-        signOptions: {expiresIn:'1d'}
-      }),
+      TypeOrmModule.forFeature([User, Sola, Razred, Narocilo,Kraj]),
+      MeniModule,
+      CommonModule,
 
   ],
+
   controllers: [AppController],
   providers: [AppService],
-  exports: [AppService]
+  exports: [AppService],
 })
 export class AppModule {}
+
 

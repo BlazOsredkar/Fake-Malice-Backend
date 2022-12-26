@@ -19,6 +19,7 @@ import {AdminGuard} from "./admin/admin.guard";
 import {UserGuard} from "./user/user.guard";
 import {ForgotPasswordDto} from "./dto/forgotPassword.dto";
 import {CreateMeniDto} from "./dto/createMeni.dto";
+import {DeleteMeniDto} from "./dto/deleteMeni.dto";
 
 
 
@@ -101,10 +102,18 @@ export class AppController {
     async register(
         @Body() body: RegisterUserDto,
     ) {
-        const user = await this.appService.findOne({eposta: body.eposta, emso: body.emso});
-        if (user) {
-            throw new BadRequestException('Uporabnik že obstaja!');
+
+        const user = await this.appService.findOne([{eposta: body.eposta}, {emso: body.emso}]);
+        if(user?.eposta === body.eposta && user?.emso === body.emso){
+            throw new BadRequestException('Uporabnik z to epošto in emšo že obstaja!');
         }
+        if (user?.eposta === body?.eposta) {
+            throw new BadRequestException('Epošta že obstaja!');
+        }
+        if (user?.emso === body?.emso) {
+            throw new BadRequestException('EMŠO že obstaja!');
+        }
+
         const hash = await bcrypt.hash(body.geslo, 10);
         const {geslo, ...data} = await this.appService.create({...body, geslo: hash});
 
@@ -114,29 +123,7 @@ export class AppController {
     }
 
 
-    @Get('meni')
-    @UseGuards(UserGuard)
-    async meni(@Query('datum') datum: string) {
 
-        if (!datum) {
-            throw new BadRequestException('Datum je obvezen parameter!');
-        }
-
-        try {
-            const date = new Date(datum);
-            date.setHours(0, 0, 0, 0);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            if (date < today) {
-                throw new BadRequestException('Datum mora biti v prihodnosti!');
-            }
-            return this.appService.findMeni({datum: date});
-        } catch (e) {
-            throw new BadRequestException('Datum je v napačnem formatu!');
-        }
-
-
-    }
 
 
     @Post('forgotPassword')
@@ -152,34 +139,9 @@ export class AppController {
         return user;
     }
 
-    @Post('createMeni')
-    @UseGuards(AdminGuard)
-    @HttpCode(200)
-    async createMeni(
-        @Body() body: CreateMeniDto,
-    ) {
 
-        const meni = await this.appService.createMeni(body);
-        return meni;
 
-    }
 
-    @Get('vrsteMenijev')
-    @UseGuards(UserGuard)
-    async vrsteMenijev() {
-        return this.appService.vrsteMenijev();
-    }
-
-    @Delete('deleteMeni')
-    @UseGuards(AdminGuard)
-    @HttpCode(200)
-    async deleteMeni(
-        @Query('id') id: string,
-    ) {
-
-            const meni = await this.appService.deleteMeni({id: id});
-            return meni;
-    }
 
 
 }

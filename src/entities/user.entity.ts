@@ -32,7 +32,7 @@ export class User {
   @Column()
   telefon: string;
 
-  @Column()
+  @Column({ type: 'bigint', unique: true })
   emso: number;
 
   @Column()

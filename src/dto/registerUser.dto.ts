@@ -19,10 +19,10 @@ export class RegisterUserDto {
     telefon: string;
 
     @IsNotEmpty()
-    emso: string;
+    emso: number;
 
     @IsNotEmpty()
-    davcna: string;
+    davcna: number;
 
     @IsNotEmpty()
     datumroj: string;

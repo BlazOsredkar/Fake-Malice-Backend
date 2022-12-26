@@ -9,8 +9,6 @@ import {VrstaMenija} from "./entities/vrste_menijev.entity";
 export class AppService {
   constructor(
       @InjectRepository(User) private readonly userRepository: Repository<User>,
-      @InjectRepository(Meni) private readonly meniRepository: Repository<Meni>,
-      @InjectRepository(VrstaMenija) private readonly vrstaMenijaRepository: Repository<VrstaMenija>,
   ) {
   }
 
@@ -22,24 +20,10 @@ export class AppService {
     return await this.userRepository.save(data);
   }
 
-  async findMeni(condition:any): Promise<Meni[]>{
-    return await this.meniRepository.find({where:condition});
-  }
-
   async forgotPassword(data: any): Promise<User[]>{
     return await this.userRepository.find(data);
   }
 
-  async createMeni(data: any): Promise<Meni>{
-    return await this.meniRepository.save(data);
-  }
-  async vrsteMenijev(): Promise<VrstaMenija[]>{
-    return await  this.vrstaMenijaRepository.find();
-  }
-
-    async deleteMeni(condition:any): Promise<DeleteResult>{
-        return await this.meniRepository.delete(condition);
-    }
 
 
 }
