@@ -136,7 +136,7 @@ export class AppController {
         if (!user) {
             throw new BadRequestException('Uporabnik ne obstaja!');
         }
-        return user;
+        return "Uspešno poslano";
     }
 
 
