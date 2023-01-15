@@ -13,6 +13,8 @@ import {Narocilo} from "./entities/narocila.entity";
 import {Kraj} from "./entities/kraji.entity";
 import { MeniModule } from './meni/meni.module';
 import { CommonModule } from './common/common.module';
+import {PozabljenoGesloEntity} from "./entities/pozabljeno-geslo.entity";
+import { UserModule } from './user/user.module';
 
 
 @Module({
@@ -28,9 +30,10 @@ import { CommonModule } from './common/common.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-      TypeOrmModule.forFeature([User, Sola, Razred, Narocilo,Kraj]),
+      TypeOrmModule.forFeature([User, Sola, Razred, Narocilo,Kraj, PozabljenoGesloEntity]),
       MeniModule,
       CommonModule,
+      UserModule,
 
   ],
 
