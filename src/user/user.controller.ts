@@ -143,7 +143,7 @@ export class UserController {
         await this.mailerService.sendMail({
             to: body.eposta,
             subject: 'Ponastavitev gesla',
-            context: { link, ime:user.ime, priimek:user.priimek, userSource: userAgentInfo.source, userOs: userAgentInfo.os.toString(), userBrowser: userAgentInfo.family, userDevice: userAgentInfo.device.toString() },
+            context: { link, ime:user.ime, priimek:user.priimek, userSource: userAgentInfo.source, userOs: userAgentInfo.os.toString(), userBrowser: userAgentInfo.family, userDevice: userAgentInfo.device.toString(), userIP: userIP},
             template: 'resetPassword.ejs',
 
         });
