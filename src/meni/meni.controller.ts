@@ -3,8 +3,6 @@ import {UserGuard} from "../user/user.guard";
 import {AdminGuard} from "../admin/admin.guard";
 import {CreateMeniDto} from "../dto/createMeni.dto";
 import {DeleteMeniDto} from "../dto/deleteMeni.dto";
-import {AppService} from "../app.service";
-import {JwtService} from "@nestjs/jwt";
 import {MeniService} from "./meni.service";
 import {UpdateMeniDto} from "../dto/UpdateMeni.dto";
 

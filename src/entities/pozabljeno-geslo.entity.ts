@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {User} from "./user.entity";
 
 @Entity('pozabljeno_geslo')
 export class PozabljenoGesloEntity {
@@ -6,8 +7,9 @@ export class PozabljenoGesloEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    email: string;
+    @ManyToOne(type => User, user => user.id,{eager: true})
+    @JoinColumn({name: 'user_id'})
+    user: User;
 
     @Column()
     token: string;

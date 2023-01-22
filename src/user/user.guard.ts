@@ -1,11 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import {AppService} from "../app.service";
 import {JwtService} from "@nestjs/jwt";
+import {UserService} from "./user.service";
 
 @Injectable()
 export class UserGuard implements CanActivate {
-  constructor(private readonly appService: AppService,
+  constructor(
               private jwtService: JwtService) {}
   async canActivate(
       context: ExecutionContext,

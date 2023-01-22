@@ -1,11 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import {AppService} from "../app.service";
 import {JwtService} from "@nestjs/jwt";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private readonly appService: AppService,
+  constructor(private readonly userService: UserService,
               private jwtService: JwtService) {}
   async canActivate(
       context: ExecutionContext,
@@ -14,7 +14,7 @@ export class AdminGuard implements CanActivate {
       const request = context.switchToHttp().getRequest();
       const jwt = request.cookies['jwt'];
       const data = this.jwtService.verify(jwt);
-      const user = await this.appService.findOne({id: data.id});
+      const user = await this.userService.findOne({id: data.id});
       if (user.isadmin) {
         return true;
       }
