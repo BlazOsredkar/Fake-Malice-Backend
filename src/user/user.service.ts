@@ -5,7 +5,7 @@ import {Repository} from "typeorm";
 import {PozabljenoGesloEntity} from "../entities/pozabljeno-geslo.entity";
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from "bcrypt";
-import {check} from "prettier";
+
 
 
 @Injectable()
