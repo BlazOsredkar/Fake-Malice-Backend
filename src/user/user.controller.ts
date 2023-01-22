@@ -142,7 +142,7 @@ export class UserController {
         const link = `http://localhost:3000/reset-password?token=${token}`;
         await this.mailerService.sendMail({
             to: body.eposta,
-            subject: 'Reset Password',
+            subject: 'Ponastavitev gesla',
             context: { link, ime:user.ime, priimek:user.priimek, userSource: userAgentInfo.source, userOs: userAgentInfo.os.toString(), userBrowser: userAgentInfo.family, userDevice: userAgentInfo.device.toString() },
             template: 'resetPassword.ejs',
 
