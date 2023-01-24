@@ -10,6 +10,4 @@ export class ResetPasswordDto {
     @IsNotEmpty()
     token: string;
 
-    @IsNotEmpty()
-    email: string;
 }
