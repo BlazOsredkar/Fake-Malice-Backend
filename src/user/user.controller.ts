@@ -134,12 +134,16 @@ export class UserController {
         const userIP = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
         console.log(userIP);
 
+        //const api = 'http://localhost:3000/reset-password?token=';
+        const api = 'https://malice.vrtogo.si/reset-password?token=';
+
         const user = await this.userService.findOne({eposta: body.eposta});
         if (!user) {
             throw new BadRequestException('Uporabnik ne obstaja!');
         }
         const token = await this.userService.createPozabljenoGeslo(user);
-        const link = `http://localhost:3000/reset-password?token=${token}`;
+        const link = `${api}${token}`;
+        console.log(link);
         await this.mailerService.sendMail({
             to: body.eposta,
             subject: 'Ponastavitev gesla',
