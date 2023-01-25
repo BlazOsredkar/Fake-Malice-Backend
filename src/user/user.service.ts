@@ -5,6 +5,7 @@ import {Repository} from "typeorm";
 import {PozabljenoGesloEntity} from "../entities/pozabljeno-geslo.entity";
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from "bcrypt";
+import {ResetPasswordDto} from "../dto/resetPassword.dto";
 
 
 
@@ -56,11 +57,11 @@ export class UserService {
         });
     }
 
-    async resetPassword(body:any){
+    async resetPassword(body: ResetPasswordDto){
         if (body.geslo !== body.ponovnoGeslo) {
             throw new BadRequestException('Gesli se ne ujemata');
         }
-        const pozabljenoGeslo = await this.findOnePozabljenoGeslo(body.eposta);
+        const pozabljenoGeslo = await this.findOnePozabljenoGeslo(body.email);
         if(!pozabljenoGeslo){
             throw new BadRequestException('Invalid token');
         }
