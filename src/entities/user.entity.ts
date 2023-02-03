@@ -11,6 +11,7 @@ import { type } from 'os';
 import { Sola } from './sole.entity';
 import { Razred } from './razredi.entity';
 import {Kraj} from "./kraji.entity";
+import {Spol} from "./spol.entity";
 
 @Entity('Dijaki')
 export class User {
@@ -35,9 +36,6 @@ export class User {
   @Column({ type: 'bigint', unique: true })
   emso: number;
 
-  @Column()
-  davcna: number;
-
   @Column('date')
   datumroj: Date;
 
@@ -55,4 +53,11 @@ export class User {
   @JoinColumn({ name: 'kraj_id' })
   kraj: Kraj;
 
+
+  @ManyToOne((type) => Spol, (spol) => spol.id)
+  @JoinColumn({ name: 'spol_id' })
+  spol: Spol;
+
+  @Column({nullable: true})
+  naslov: string;
 }

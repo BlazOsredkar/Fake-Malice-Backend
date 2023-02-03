@@ -21,7 +21,7 @@ import {UserModule} from "../user/user.module";
   imports: [
     forwardRef(() => AppModule),
       CommonModule,
-    TypeOrmModule.forFeature([Meni, VrstaMenija]),
+    TypeOrmModule.forFeature([Meni, VrstaMenija, Narocilo]),
       UserModule
   ],
     exports: [MeniService]

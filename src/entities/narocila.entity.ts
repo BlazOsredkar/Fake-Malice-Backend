@@ -10,12 +10,13 @@ export class Narocilo {
     id:number;
 
     @ManyToOne(type => User, user => user.id)
-    @JoinColumn({name: 'user_id'})
-    user:User;
+    @JoinColumn({name: 'narocilo_user_id'})
+    user: User;
 
-    @ManyToOne(type => Meni, meni => meni.id)
-    @JoinColumn({name: 'meni_id'})
-    meni:Meni;
+    @ManyToOne(type => Meni, meni => meni.id, {eager: true})
+    @JoinColumn({name: 'narocilo_meni_id'})
+    meni: Meni;
+
 
     @Column()
     datum:Date;

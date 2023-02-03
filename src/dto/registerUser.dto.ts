@@ -22,10 +22,10 @@ export class RegisterUserDto {
     emso: number;
 
     @IsNotEmpty()
-    davcna: number;
+    datumroj: string;
 
     @IsNotEmpty()
-    datumroj: string;
+    kraj:string;
 
 
 

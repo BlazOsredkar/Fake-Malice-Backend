@@ -1,10 +1,23 @@
-import {BadRequestException, Body, Controller, Delete, Get, HttpCode, Post, Query, UseGuards} from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Post,
+    Query,
+    Req,
+    UseGuards
+} from '@nestjs/common';
 import {UserGuard} from "../user/user.guard";
 import {AdminGuard} from "../admin/admin.guard";
 import {CreateMeniDto} from "../dto/createMeni.dto";
 import {DeleteMeniDto} from "../dto/deleteMeni.dto";
 import {MeniService} from "./meni.service";
 import {UpdateMeniDto} from "../dto/UpdateMeni.dto";
+import {OrderMeniDto} from "../dto/orderMeni.dto";
+import {GetOrededMeniDto} from "../dto/getOrderedMeni.dto";
 
 @Controller('/api/meni')
 export class MeniController {
@@ -76,6 +89,31 @@ export class MeniController {
         const meni = await this.MeniService.updateMeni(body.id, body);
         return meni;
     }
-    
+
+
+    @Post('order')
+    @UseGuards(UserGuard)
+    @HttpCode(200)
+    async orderMeni(
+        @Req() req,
+        @Body() body: OrderMeniDto,
+    ) {
+        const meni = await this.MeniService.orderMeni(body.meni, req.userId);
+        return meni;
+    }
+
+    @Post('order/get')
+    @UseGuards(UserGuard)
+    @HttpCode(200)
+    async getOrderedMeni(
+        @Req() req,
+        @Body() body: GetOrededMeniDto,
+    ) {
+        const date = new Date(Date.parse(body.datum));
+        date.setHours(0, 0, 0, 0);
+
+        const meni = await this.MeniService.getOrderedMeni(req.userId, date);
+        return meni;
+    }
     
 }

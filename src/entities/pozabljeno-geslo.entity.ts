@@ -7,8 +7,8 @@ export class PozabljenoGesloEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(type => User, user => user.id,{eager: true})
-    @JoinColumn({name: 'user_id'})
+    @ManyToOne(type => User, user => user.id, {eager: true})
+    @JoinColumn({name: 'pozabljeno_geslo_user_id'})
     user: User;
 
     @Column()

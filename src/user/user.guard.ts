@@ -15,6 +15,8 @@ export class UserGuard implements CanActivate {
       const jwt = request.cookies['jwt'];
       const data = this.jwtService.verify(jwt);
       if(data){
+        const request = context.switchToHttp().getRequest();
+        request.userId = data.id;
         return true;
       }
     } catch (e) {

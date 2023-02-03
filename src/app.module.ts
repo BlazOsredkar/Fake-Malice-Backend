@@ -16,6 +16,9 @@ import { UserModule } from './user/user.module';
 import {MailerModule} from "@nestjs-modules/mailer";
 import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 import {EjsAdapter} from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
+import { CitiesModule } from './cities/cities.module';
+import { ClassesModule } from './classes/classes.module';
+import { SchoolModule } from './school/school.module';
 
 
 @Module({
@@ -44,9 +47,9 @@ import {EjsAdapter} from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
           },
          }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DB_HOST,
-      port: 5432,
+      port: 3306,
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
@@ -54,10 +57,12 @@ import {EjsAdapter} from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
       synchronize: true,
     }),
 
-      TypeOrmModule.forFeature([Sola, Razred, Narocilo,Kraj]),
       MeniModule,
       CommonModule,
       UserModule,
+      CitiesModule,
+      ClassesModule,
+      SchoolModule,
 
   ],
 })

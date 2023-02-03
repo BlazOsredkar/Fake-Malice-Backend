@@ -6,6 +6,8 @@ import {PozabljenoGesloEntity} from "../entities/pozabljeno-geslo.entity";
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from "bcrypt";
 import {ResetPasswordDto} from "../dto/resetPassword.dto";
+import {UpdateUserDto} from "../dto/UpdateUser.dto";
+import {Spol} from "../entities/spol.entity";
 
 
 
@@ -14,10 +16,10 @@ export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(PozabljenoGesloEntity) private readonly pozabljenoGesloRepository: Repository<PozabljenoGesloEntity>,
+        @InjectRepository(Spol) private readonly spolRepository: Repository<Spol>
     ) {
     }
     async findOne(condition:any): Promise<User>{
-
         return await this.userRepository.findOne({where:condition});
     }
 
@@ -80,5 +82,33 @@ export class UserService {
         await this.pozabljenoGesloRepository.remove(pozabljenoGeslo);
         return "Password reset successfully";
 
+    }
+
+    async findAll(): Promise<User[]>{
+        return await this.userRepository.find();
+    }
+
+    async delete(id: number) {
+        if (!id)
+            throw new BadRequestException('Invalid id');
+        return await this.userRepository.delete(id);
+
+    }
+
+    async update(id: number, data: UpdateUserDto) {
+        if (!id)
+            throw new BadRequestException('Invalid id');
+        if (!data)
+            throw new BadRequestException('Invalid data');
+        if (data.geslo !== undefined) {
+            const hashpassword = await bcrypt.hash(data.geslo, 10);
+            data.geslo = hashpassword;
+        }
+        return await this.userRepository.update(id, data);
+    }
+
+
+    async spol(): Promise<Spol[]> {
+        return await this.spolRepository.find();
     }
 }

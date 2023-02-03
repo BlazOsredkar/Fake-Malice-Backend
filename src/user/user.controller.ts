@@ -1,13 +1,14 @@
 import {
     BadRequestException,
     Body,
-    Controller,
+    Controller, Delete,
     Get,
-    HttpCode,
-    Post,
+    HttpCode, Param,
+    Post, Put,
     Req,
     Res,
-    UnauthorizedException, UseGuards
+    UnauthorizedException, UseGuards,
+    forwardRef, Inject
 } from '@nestjs/common';
 import {Request, Response} from "express";
 import {JwtService} from "@nestjs/jwt";
@@ -22,6 +23,9 @@ import { v4 as uuidv4 } from 'uuid';
 import {PozabljenoGesloEntity} from "../entities/pozabljeno-geslo.entity";
 import {ResetPasswordDto} from "../dto/resetPassword.dto";
 import * as userAgent from 'useragent';
+import {compare} from "bcrypt";
+import {UpdateUserDto} from "../dto/UpdateUser.dto";
+import {CitiesService} from "../cities/cities.service";
 
 @Controller('/api/user')
 export class UserController {
@@ -29,7 +33,12 @@ export class UserController {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 ,
     }
-    constructor(private readonly jwtService: JwtService, private  readonly userService:UserService, private readonly mailerService: MailerService) {}
+    constructor(private readonly jwtService: JwtService,
+                private  readonly userService:UserService,
+                private readonly mailerService: MailerService,
+        @Inject(forwardRef(() => CitiesService))
+        private citiesService: CitiesService,
+    ) {}
 
     @Get()
     async user(@Req() request: Request) {
@@ -43,10 +52,9 @@ export class UserController {
             }
 
             const user = await this.userService.findOne({id: data['id']})
-
             const {geslo, ...result} = user;
-
             return result;
+
         } catch (e) {
             throw new UnauthorizedException();
         }
@@ -109,8 +117,14 @@ export class UserController {
             throw new BadRequestException('EMŠO že obstaja!');
         }
 
+        const razdeljenKraj = body.kraj.split(',');
+        const kraj = await this.citiesService.findOneByNameAndPostnaSt(parseInt(razdeljenKraj[1].trim()), razdeljenKraj[0].trim());
+        if(!kraj){
+            throw new BadRequestException('Kraj ne obstaja!');
+        }
+
         const hash = await bcrypt.hash(body.geslo, 10);
-        const {geslo, ...data} = await this.userService.create({...body, geslo: hash});
+        const {geslo, ...data} = await this.userService.create({...body, geslo: hash,kraj: {id: kraj.id}});
 
         return data;
 
@@ -159,5 +173,49 @@ export class UserController {
         @Body() body: ResetPasswordDto,
     ) {
         return await this.userService.resetPassword(body);
+    }
+
+    @UseGuards(AdminGuard)
+    @Get('all')
+    @HttpCode(200)
+    async all(@Req() request: Request) {
+        const all = await this.userService.findAll();
+        for (let i = 0; i < all.length; i++) {
+            delete all[i].geslo;
+        }
+        return all;
+    }
+
+    @UseGuards(AdminGuard)
+    @Delete('/delete/:id')
+    @HttpCode(200)
+    async delete(@Param('id') id: number) {
+        return await this.userService.delete(id);
+    }
+
+    @UseGuards(AdminGuard)
+    @Put('/update/:id')
+    @HttpCode(200)
+    async update(@Param('id') id: number, @Body() body: UpdateUserDto) {
+        return await this.userService.update(id, body);
+    }
+
+    @UseGuards(AdminGuard)
+    @Get('/find/:id')
+    @HttpCode(200)
+    async find(@Param('id') id: number) {
+        if (!id) {
+            throw new BadRequestException('Napaka!');
+        }
+        const {geslo, ...user} = await this.userService.findOne({id: id});
+        return user;
+
+    }
+
+    @UseGuards(AdminGuard)
+    @Get('/spol')
+    @HttpCode(200)
+    async spol() {
+        return await this.userService.spol();
     }
 }
