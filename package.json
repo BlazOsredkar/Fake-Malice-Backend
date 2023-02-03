@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "mysql2": "^2.3.3",
     "nodemailer": "^6.9.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.8.0",
@@ -43,7 +44,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.3.10",
+    "typeorm": "^0.3.11",
     "useragent": "^2.3.0",
     "uuid": "^9.0.0"
   },
