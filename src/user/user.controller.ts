@@ -19,8 +19,6 @@ import {AdminGuard} from "../admin/admin.guard";
 import {RegisterUserDto} from "../dto/registerUser.dto";
 import {ForgotPasswordDto} from "../dto/forgotPassword.dto";
 import {MailerService} from "@nestjs-modules/mailer";
-import { v4 as uuidv4 } from 'uuid';
-import {PozabljenoGesloEntity} from "../entities/pozabljeno-geslo.entity";
 import {ResetPasswordDto} from "../dto/resetPassword.dto";
 import * as userAgent from 'useragent';
 import {compare} from "bcrypt";
