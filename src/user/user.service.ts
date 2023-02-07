@@ -104,7 +104,12 @@ export class UserService {
             const hashpassword = await bcrypt.hash(data.geslo, 10);
             data.geslo = hashpassword;
         }
-        return await this.userRepository.update(id, data);
+        return await this.userRepository.update(id, {
+            ...data,
+            razred:{id:data.razredID},
+            spol:{id:data.spolID},
+            kraj:{id:data.krajID}
+        });
     }
 
 

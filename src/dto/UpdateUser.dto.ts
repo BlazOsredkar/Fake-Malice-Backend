@@ -29,6 +29,16 @@ export class UpdateUserDto {
     datumroj: string;
 
 
+    @IsOptional()
+    razredID: number;
+
+    @IsOptional()
+    krajID: number;
+
+    @IsOptional()
+    spolID: number;
+
+
 
 
 }

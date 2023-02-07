@@ -45,17 +45,17 @@ export class User {
   @Column({ default: false })
   isadmin: boolean;
 
-  @ManyToOne((type) => Razred, (razred) => razred.id)
-  @JoinColumn({ name: 'razred_id' })
+  @ManyToOne((type) => Razred, (razred) => razred.id, { eager: true })
+  @JoinColumn({ name: 'user_razred_id' })
   razred: Razred;
 
-  @ManyToOne((type) => Kraj, (kraj) => kraj.id)
-  @JoinColumn({ name: 'kraj_id' })
+  @ManyToOne((type) => Kraj, (kraj) => kraj.id, { eager: true })
+  @JoinColumn({ name: 'user_kraj_id' })
   kraj: Kraj;
 
 
-  @ManyToOne((type) => Spol, (spol) => spol.id)
-  @JoinColumn({ name: 'spol_id' })
+  @ManyToOne((type) => Spol, (spol) => spol.id, { eager: true })
+  @JoinColumn({ name: 'user_spol_id' })
   spol: Spol;
 
   @Column({nullable: true})
