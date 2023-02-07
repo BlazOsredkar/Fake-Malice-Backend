@@ -146,8 +146,8 @@ export class UserController {
         const userIP = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
         console.log(userIP);
 
-        //const api = 'http://localhost:3000/';
-        const api = 'https://malice.vrtogo.si/';
+        const api = 'http://localhost:3000/';
+        //const api = 'https://malice.vrtogo.si/';
 
         const user = await this.userService.findOne({eposta: body.eposta});
         if (!user) {

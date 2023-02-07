@@ -18,12 +18,12 @@ import { SchoolModule } from './school/school.module';
       ConfigModule.forRoot({isGlobal:true}),
       MailerModule.forRoot({
           transport: {
-              host: 'malice.vrtogo.si',
+              host: process.env.MAIL_HOST,
               port: 465,
               secure: true,
               auth: {
-                  user: 'info@malice.vrtogo.si',
-                  pass: 'Geslo2022!',
+                  user: process.env.MAIL_USER,
+                  pass: process.env.MAIL_PASS,
               },
               path: '/mail/',
           },
