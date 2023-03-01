@@ -1,4 +1,7 @@
 import {IsEmail, IsNotEmpty, IsOptional} from "class-validator";
+import {Spol} from "../entities/spol.entity";
+import {Kraj} from "../entities/kraji.entity";
+import {Razred} from "../entities/razredi.entity";
 
 
 
@@ -38,7 +41,11 @@ export class UpdateUserDto {
     @IsOptional()
     spolID: number;
 
+    @IsOptional()
+    stanjerac: number;
 
-
+    spol:any;
+    razred:any;
+    kraj:any;
 
 }

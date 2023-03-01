@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, InternalServerErrorException} from '@nestjs/common';
 import {User} from "../entities/user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
@@ -8,6 +8,9 @@ import * as bcrypt from "bcrypt";
 import {ResetPasswordDto} from "../dto/resetPassword.dto";
 import {UpdateUserDto} from "../dto/UpdateUser.dto";
 import {Spol} from "../entities/spol.entity";
+import {Kraj} from "../entities/kraji.entity";
+
+
 
 
 
@@ -16,7 +19,7 @@ export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(PozabljenoGesloEntity) private readonly pozabljenoGesloRepository: Repository<PozabljenoGesloEntity>,
-        @InjectRepository(Spol) private readonly spolRepository: Repository<Spol>
+        @InjectRepository(Spol) private readonly spolRepository: Repository<Spol>,
     ) {
     }
     async findOne(condition:any): Promise<User>{
@@ -24,6 +27,15 @@ export class UserService {
     }
 
     async create(data: any): Promise<User>{
+        if (data.razredID !== undefined) {
+            data.razred = { id: data.razredID };
+        }
+        if (data.spolID !== undefined) {
+            data.spol = { id: data.spolID };
+        }
+        if (data.krajID !== undefined) {
+            data.kraj = { id: data.krajID };
+        }
         return await this.userRepository.save(data);
     }
 
@@ -80,7 +92,7 @@ export class UserService {
         user.geslo = hashpassword;
         await this.userRepository.save(user);
         await this.pozabljenoGesloRepository.remove(pozabljenoGeslo);
-        return "Password reset successfully";
+        return "Geslo uspešno spremenjeno";
 
     }
 
@@ -95,7 +107,10 @@ export class UserService {
 
     }
 
-    async update(id: number, data: UpdateUserDto) {
+    async update(id: number, data: UpdateUserDto){
+
+
+
         if (!id)
             throw new BadRequestException('Invalid id');
         if (!data)
@@ -104,13 +119,29 @@ export class UserService {
             const hashpassword = await bcrypt.hash(data.geslo, 10);
             data.geslo = hashpassword;
         }
-        return await this.userRepository.update(id, {
-            ...data,
-            razred:{id:data.razredID},
-            spol:{id:data.spolID},
-            kraj:{id:data.krajID}
-        });
+
+
+        if (data.razredID !== undefined) {
+            data.razred = { id: data.razredID };
+        }
+        if (data.spolID !== undefined) {
+            data.spol = { id: data.spolID };
+        }
+        if (data.krajID !== undefined) {
+            data.kraj = { id: data.krajID };
+        }
+        
+        try {
+            return await this.userRepository.update(id, {  ...data
+            });
+        } catch (error) {
+            console.log(error);
+            throw new InternalServerErrorException('Error updating user');
+
+        }
+
     }
+
 
 
     async spol(): Promise<Spol[]> {
