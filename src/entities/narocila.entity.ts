@@ -9,7 +9,7 @@ export class Narocilo {
     @PrimaryGeneratedColumn('increment')
     id:number;
 
-    @ManyToOne(type => User, user => user.id)
+    @ManyToOne(type => User, user => user.id, {eager: true})
     @JoinColumn({name: 'narocilo_user_id'})
     user: User;
 

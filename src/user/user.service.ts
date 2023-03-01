@@ -142,6 +142,13 @@ export class UserService {
 
     }
 
+    async removeMoney(user: User) {
+        if(user.stanjerac) {
+            user.stanjerac -= 2.70;
+            return await this.userRepository.save(user)
+        }
+    }
+
 
 
     async spol(): Promise<Spol[]> {

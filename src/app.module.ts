@@ -11,10 +11,12 @@ import {EjsAdapter} from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
 import { CitiesModule } from './cities/cities.module';
 import { ClassesModule } from './classes/classes.module';
 import { SchoolModule } from './school/school.module';
+import {ScheduleModule} from "@nestjs/schedule";
 
 
 @Module({
   imports: [
+      ScheduleModule.forRoot(),
       ConfigModule.forRoot({isGlobal:true}),
       MailerModule.forRoot({
           transport: {
