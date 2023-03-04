@@ -19,9 +19,14 @@ export class MeniService {
     ) {
     }
 
-    @Cron('59 59 23 * * *')
+    @Cron('59 0 23 * * *')
     async handleCron() {
         await this.removeUsersMoney();
+    }
+
+    @Cron('0 1 0 1 * *')
+    async handleCronForMonth() {
+        await this.fillMenusForNextMonth()
     }
 
     async removeUsersMoney() {
@@ -35,6 +40,38 @@ export class MeniService {
                 await this.userService.removeMoney(narocilo.user)
             }
         }
+    }
+
+    async fillMenusForNextMonth() {
+        const today = new Date();
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        const days = this.getDates(firstDay, lastDay);
+        const vrsteMenijev = await this.vrsteMenijev();
+        for (const day of days) {
+            for (const vrstaMenija of vrsteMenijev) {
+                if(vrstaMenija.ime === "Mesni meni" || vrstaMenija.ime === "Vegi meni") {
+                    continue;
+                }
+                const meni = new Meni();
+                meni.datum = day;
+                meni.vrstaMenija = vrstaMenija;
+                await this.createMeni(meni);
+            }
+        }
+    }
+
+    getDates(startDate, stopDate) {
+        const dateArray = [];
+        let currentDate:Date = startDate;
+        while (currentDate <= stopDate){
+            const isWeekend:boolean = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+            if(!isWeekend){
+                dateArray.push(new Date (currentDate));
+            }
+            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+        }
+        return dateArray;
     }
 
     async createMeni(data: any): Promise<Meni>{

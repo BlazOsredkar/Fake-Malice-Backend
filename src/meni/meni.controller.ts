@@ -117,5 +117,13 @@ export class MeniController {
         const meni = await this.MeniService.getOrderedMeni(req.userId, date);
         return meni;
     }
+
+    @Get("fill")
+    @UseGuards(AdminGuard)
+    @HttpCode(200)
+    async fillMeni(){
+        await this.MeniService.fillMenusForNextMonth();
+        return "OK";
+    }
     
 }
