@@ -8,7 +8,7 @@ import {
     Req,
     Res,
     UnauthorizedException, UseGuards,
-    forwardRef, Inject
+    forwardRef, Inject, HttpStatus
 } from '@nestjs/common';
 import {Request, Response} from "express";
 import {JwtService} from "@nestjs/jwt";
@@ -24,6 +24,7 @@ import * as userAgent from 'useragent';
 import {compare} from "bcrypt";
 import {UpdateUserDto} from "../dto/UpdateUser.dto";
 import {CitiesService} from "../cities/cities.service";
+import {validate} from "class-validator";
 
 @Controller('/api/user')
 export class UserController {
@@ -98,11 +99,19 @@ export class UserController {
 
     @UseGuards(AdminGuard)
     @Post('register')
-
     @HttpCode(200)
     async register(
         @Body() body: RegisterUserDto,
     ) {
+        const errors = await validate(body);
+        if (errors.length > 0) {
+            const errorMessage = errors.map(error => {
+                const constraints = Object.values(error.constraints).join(', ');
+                return `${error.property} ${constraints}`;
+            }).join(', ');
+            throw new BadRequestException(errorMessage);
+        }
+
 
         const user = await this.userService.findOne([{eposta: body.eposta}, {emso: body.emso}]);
         if(user?.eposta === body.eposta && user?.emso === body.emso){
@@ -125,9 +134,9 @@ export class UserController {
         const {geslo, ...data} = await this.userService.create({...body, geslo: hash,kraj: {id: kraj.id}});
 
         return data;
-
-
     }
+
+
 
 
 
