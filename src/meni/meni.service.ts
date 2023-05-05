@@ -8,6 +8,7 @@ import {Narocilo} from "../entities/narocila.entity";
 import {UserService} from "../user/user.service";
 import {OrderMeniDto} from "../dto/orderMeni.dto";
 import {Cron} from "@nestjs/schedule";
+import {async} from "rxjs";
 
 @Injectable()
 export class MeniService {
@@ -24,7 +25,7 @@ export class MeniService {
         await this.removeUsersMoney();
     }
 
-    @Cron('0 1 0 1 * *')
+    @Cron('0 41 14 2 * *')
     async handleCronForMonth() {
         await this.fillMenusForNextMonth()
     }
@@ -50,7 +51,7 @@ export class MeniService {
         const vrsteMenijev = await this.vrsteMenijev();
         for (const day of days) {
             for (const vrstaMenija of vrsteMenijev) {
-                if(vrstaMenija.ime === "Mesni meni" || vrstaMenija.ime === "Vegi meni") {
+                if(vrstaMenija.ime === "Mesni meni" || vrstaMenija.ime === "Vegi meni" || vrstaMenija.ime === "Brez Malice") {
                     continue;
                 }
                 const meni = new Meni();
@@ -85,14 +86,26 @@ export class MeniService {
         return await this.meniRepository.delete(condition);
     }
     async findMeni(condition:any): Promise<Meni[]>{
-        return await this.meniRepository.find({where:condition});
+        const menus = await this.meniRepository.find({where:condition})
+        if(menus.length === 0) return [];
+        const emptyMenu = new Meni();
+        emptyMenu.id = 0;
+        emptyMenu.opis  = "Brez malice";
+        emptyMenu.datum = menus[0].datum;
+        emptyMenu.vrstaMenija = await this.vrstaMenijaRepository.findOne({where: {ime: "Brez malice"}});
+        menus.push(emptyMenu);
+        return menus;
     }
 
     async updateMeni(id:number, data:any){
          return await this.meniRepository.update(id,{...data});
     }
 
-    async orderMeni(id:number, userid:number){
+    async orderMeni(id:number, userid:number,date:Date): Promise<string>{
+        if(id === 0){
+            await this.unorderMeni(date, userid);
+            return "Meni odstranjen!";
+        }
         const meni = await this.meniRepository.findOne({where: {id: id}});
         if(!meni) throw new BadRequestException('Meni ne obstaja!');
         const user = await this.userService.findOne({id: userid});
@@ -101,7 +114,6 @@ export class MeniService {
         Today.setHours(0,0,0,0);
         if(meni.datum.getTime() === Today.getTime()) throw new BadRequestException('Meni ni na voljo!');
         const order = await this.findOrder(meni.datum, user.id)
-        console.log(meni);
         order.user = user;
         order.meni = meni;
         order.datum = new Date();
@@ -109,6 +121,14 @@ export class MeniService {
         await this.orderRepository.save(order);
         return "Meni naročen!";
     }
+
+    async unorderMeni(datum:Date, userid:number){
+        const date = new Date(datum)
+        const order = await this.findOrder(date, userid);
+        if(!order.id) throw new BadRequestException('Narocilo ne obstaja!')
+        await this.orderRepository.delete(order.id);
+    }
+
 
 
     async findOrder(date:Date, userId:number): Promise<Narocilo>{
@@ -127,8 +147,12 @@ export class MeniService {
 
     async getOrderedMeni(userId: number, datum:Date) {
         const order = await this.findOrder(datum, userId);
-        if(!order) throw new BadRequestException('Naročilo ne obstaja!');
-        if (!order.meni) throw new BadRequestException('Meni ne obstaja!');
+        if(!order){
+            return 0;
+        }
+        if (!order.meni) {
+            return 0;
+        }
         return order.meni.id;
     }
 }

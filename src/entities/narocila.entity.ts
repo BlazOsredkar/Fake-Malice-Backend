@@ -9,7 +9,7 @@ export class Narocilo {
     @PrimaryGeneratedColumn('increment')
     id:number;
 
-    @ManyToOne(type => User, user => user.id, {eager: true})
+    @ManyToOne(type => User, user => user.id, {eager: true, onDelete:"CASCADE"})
     @JoinColumn({name: 'narocilo_user_id'})
     user: User;
 

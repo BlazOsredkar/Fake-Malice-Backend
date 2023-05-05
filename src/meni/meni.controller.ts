@@ -98,9 +98,7 @@ export class MeniController {
         @Req() req,
         @Body() body: OrderMeniDto,
     ) {
-
-
-        const meni = await this.MeniService.orderMeni(body.meni, req.userId);
+        const meni = await this.MeniService.orderMeni(body.meni, req.userId, body.datum);
         return meni;
     }
 

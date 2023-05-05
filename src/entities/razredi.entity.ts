@@ -18,7 +18,4 @@ export class Razred {
 
   @Column()
   ime: string;
-
-  @Column()
-  sol_leto: string;
 }
