@@ -153,7 +153,6 @@ export class UserController {
         const userAgentString = request.headers['user-agent'];
         const userAgentInfo = userAgent.parse(userAgentString);
         const userIP = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
-        console.log(userIP);
 
         //const api = 'http://localhost:3000/';
         const api = 'https://malice.vrtogo.si/';
@@ -164,7 +163,6 @@ export class UserController {
         }
         const token = await this.userService.createPozabljenoGeslo(user);
         const link = `${api}password/reset?token=${token}&email=${user.eposta}`;
-        console.log(link);
         await this.mailerService.sendMail({
             to: body.eposta,
             subject: 'Ponastavitev gesla',

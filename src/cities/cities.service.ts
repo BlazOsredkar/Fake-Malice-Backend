@@ -14,7 +14,6 @@ export class CitiesService {
 
     async findOneByNameAndPostnaSt(postnaSt: number, kraj: string) {
         if(!postnaSt || !kraj) return null;
-        console.log(postnaSt, kraj);
         return await this.krajRepository.findOne({ where: { postnaStevilka: postnaSt } });
     }
 }

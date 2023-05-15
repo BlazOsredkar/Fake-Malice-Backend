@@ -18,4 +18,5 @@ export class UpdateMeniDto {
     @IsOptional()
     @IsDate()
     datum: Date;
+
 }

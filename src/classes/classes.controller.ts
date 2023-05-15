@@ -25,20 +25,6 @@ export class ClassesController {
         return this.classesService.findAll();
     }
 
-    @UseGuards(AdminGuard)
-    @Delete('/delete/:id')
-    @HttpCode(200)
-    async delete(@Param('id') id: number) {
-        return await this.classesService.delete(id);
-    }
-
-    @UseGuards(AdminGuard)
-    @Put('/update/:id')
-    @HttpCode(200)
-    async update(@Param('id') id: number, @Body() body: UpdateUserDto) {
-        return await this.classesService.update(id, body);
-    }
-
 
 
 }

@@ -17,18 +17,5 @@ export class SchoolController {
     }
 
 
-    @UseGuards(AdminGuard)
-    @Delete('/delete/:id')
-    @HttpCode(200)
-    async delete(@Param('id') id: number) {
-        return await this.schoolService.delete(id);
-    }
-
-    @UseGuards(AdminGuard)
-    @Put('/update/:id')
-    @HttpCode(200)
-    async update(@Param('id') id: number, @Body() body: UpdateSchoolDto) {
-        return await this.schoolService.update(id, body);
-    }
 
 }

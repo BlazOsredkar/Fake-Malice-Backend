@@ -135,7 +135,6 @@ export class UserService {
             return await this.userRepository.update(id, {  ...data
             });
         } catch (error) {
-            console.log(error);
             throw new InternalServerErrorException('Error updating user');
 
         }
